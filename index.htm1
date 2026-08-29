@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>تحدي</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Arial,Tahoma,sans-serif;
+}
+
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#090d1a,#171f3b,#31105a);
+color:white;
+}
+
+.screen{
+display:none;
+min-height:100vh;
+padding:25px;
+}
+
+.screen.active{
+display:block;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.logo{
+font-size:55px;
+font-weight:900;
+text-align:center;
+margin-top:60px;
+background:linear-gradient(90deg,#8b5cf6,#22d3ee);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.subtitle{
+text-align:center;
+color:#b9c0d4;
+font-size:20px;
+margin:12px 0 40px;
+}
+
+.card{
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.13);
+backdrop-filter:blur(15px);
+border-radius:25px;
+padding:25px;
+box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+
+input{
+width:100%;
+padding:17px;
+border-radius:15px;
+border:1px solid #3b4668;
+background:#11182c;
+color:white;
+font-size:18px;
+outline:none;
+margin-bottom:14px;
+}
+
+button{
+border:0;
+cursor:pointer;
+transition:.2s;
+}
+
+button:hover{
+transform:scale(1.03);
+}
+
+.primary{
+width:100%;
+background:linear-gradient(90deg,#7c3aed,#2563eb);
+color:white;
+padding:17px;
+font-size:19px;
+font-weight:bold;
+border-radius:16px;
+margin-top:10px;
+}
+
+.section-title{
+font-size:27px;
+text-align:center;
+margin-bottom:25px;
+}
+
+.categories{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:16px;
+}
+
+.category{
+background:#151d33;
+border:2px solid transparent;
+color:white;
+padding:25px 15px;
+border-radius:20px;
+font-size:18px;
+font-weight:bold;
+}
+
+.category span{
+display:block;
+font-size:35px;
+margin-bottom:10px;
+}
+
+.category.selected{
+border-color:#8b5cf6;
+background:#241545;
+}
+
+.select-count{
+text-align:center;
+margin:20px;
+font-size:18px;
+color:#c4b5fd;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:22px;
+}
+
+.team-score{
+background:#12192c;
+border:1px solid #29324d;
+padding:15px 22px;
+border-radius:18px;
+text-align:center;
+min-width:160px;
+}
+
+.team-name{
+font-size:16px;
+color:#aab3ca;
+}
+
+.points{
+font-size:32px;
+font-weight:900;
+}
+
+.board{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:12px;
+overflow-x:auto;
+padding-bottom:10px;
+}
+
+.column{
+min-width:145px;
+}
+
+.category-head{
+height:100px;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:linear-gradient(135deg,#4c1d95,#1d4ed8);
+border-radius:16px;
+font-weight:bold;
+padding:10px;
+margin-bottom:10px;
+}
+
+.question-btn{
+width:100%;
+height:78px;
+margin-bottom:10px;
+border-radius:15px;
+background:#151d33;
+border:1px solid #313d5e;
+color:#fbbf24;
+font-size:27px;
+font-weight:900;
+}
+
+.question-btn.used{
+opacity:.2;
+pointer-events:none;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.82);
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:100;
+}
+
+.modal.active{
+display:flex;
+}
+
+.question-card{
+max-width:750px;
+width:100%;
+background:#12182c;
+border:1px solid #35415f;
+border-radius:30px;
+padding:35px;
+text-align:center;
+}
+
+.question-value{
+color:#fbbf24;
+font-size:21px;
+font-weight:bold;
+}
+
+.question-text{
+font-size:31px;
+line-height:1.7;
+margin:30px 0;
+}
+
+.timer{
+font-size:50px;
+font-weight:900;
+margin:15px;
+}
+
+.answer{
+display:none;
+font-size:27px;
+padding:20px;
+border-radius:18px;
+background:rgba(34,197,94,.13);
+border:1px solid #22c55e;
+margin:20px 0;
+}
+
+.answer.show{
+display:block;
+}
+
+.actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.action{
+padding:14px 20px;
+border-radius:14px;
+font-weight:bold;
+font-size:16px;
+}
+
+.show-answer{
+background:#7c3aed;
+color:white;
+}
+
+.team1{
+background:#2563eb;
+color:white;
+}
+
+.team2{
+background:#e11d48;
+color:white;
+}
+
+.no-answer{
+background:#374151;
+color:white;
+}
+
+.winner{
+text-align:center;
+padding-top:100px;
+}
+
+.winner h1{
+font-size:60px;
+margin-bottom:20px;
+}
+
+.winner p{
+font-size:28px;
+color:#fbbf24;
+}
+
+@media(max-width:700px){
+
+.logo{
+font-size:42px;
+}
+
+.board{
+grid-template-columns:repeat(6,145px);
+}
+
+.topbar{
+flex-direction:column;
+}
+
+.team-score{
+width:100%;
+}
+
+.question-text{
+font-size:24px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- البداية -->
+
+<section id="start" class="screen active">
+
+<div class="container">
+
+<div class="logo">تحدي 🔥</div>
+
+<div class="subtitle">
+اختبر معلوماتك وتحدى أصحابك
+</div>
+
+<div class="card" style="max-width:550px;margin:auto">
+
+<h2 class="section-title">من بيلعب اليوم؟</h2>
+
+<input id="team1Input" value="الفريق الأول" placeholder="اسم الفريق الأول">
+
+<input id="team2Input" value="الفريق الثاني" placeholder="اسم الفريق الثاني">
+
+<button class="primary" onclick="goCategories()">
+اختيار الفئات
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- الفئات -->
+
+<section id="categoryScreen" class="screen">
+
+<div class="container">
+
+<h1 class="section-title">اختار 6 فئات</h1>
+
+<div class="categories" id="categories"></div>
+
+<div class="select-count">
+تم اختيار <span id="selectedCount">0</span> من 6
+</div>
+
+<button class="primary" onclick="startGame()">
+ابدأ اللعبة 🚀
+</button>
+
+</div>
+
+</section>
+
+<!-- لوحة اللعبة -->
+
+<section id="game" class="screen">
+
+<div class="container">
+
+<div class="topbar">
+
+<div class="team-score">
+<div class="team-name" id="team1Name"></div>
+<div class="points" id="score1">0</div>
+</div>
+
+<h2>🔥 تحدي</h2>
+
+<div class="team-score">
+<div class="team-name" id="team2Name"></div>
+<div class="points" id="score2">0</div>
+</div>
+
+</div>
+
+<div class="board" id="board"></div>
+
+</div>
+
+</section>
+
+<!-- السؤال -->
+
+<div class="modal" id="questionModal">
+
+<div class="question-card">
+
+<div class="question-value" id="questionValue"></div>
+
+<div class="timer" id="timer">30</div>
+
+<div class="question-text" id="questionText"></div>
+
+<div class="answer" id="answer"></div>
+
+<div class="actions">
+
+<button class="action show-answer" onclick="showAnswer()">
+إظهار الإجابة
+</button>
+
+<button class="action team1" onclick="givePoints(1)">
+✓ الفريق الأول
+</button>
+
+<button class="action team2" onclick="givePoints(2)">
+✓ الفريق الثاني
+</button>
+
+<button class="action no-answer" onclick="closeQuestion()">
+لا أحد
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- النهاية -->
+
+<section id="finish" class="screen">
+
+<div class="winner">
+
+<h1>🏆 انتهت اللعبة</h1>
+
+<p id="winnerText"></p>
+
+<button class="primary"
+style="max-width:350px"
+onclick="location.reload()">
+
+لعبة جديدة
+
+</button>
+
+</div>
+
+</section>
+
+<script>
+
+const data={
+
+"الإمارات":{
+icon:"🇦🇪",
+questions:[
+["في أي سنة تأسست دولة الإمارات؟","1971",200],
+["كم عدد إمارات دولة الإمارات؟","7 إمارات",200],
+["من هو مؤسس دولة الإمارات؟","الشيخ زايد بن سلطان آل نهيان",400],
+["ما أكبر إمارة من حيث المساحة؟","أبوظبي",400],
+["ما أعلى جبل في الإمارات؟","جبل جيس",600],
+["في أي إمارة يقع جبل جيس؟","رأس الخيمة",600]
+]},
+
+"كرة القدم":{
+icon:"⚽",
+questions:[
+["كم لاعباً يبدأ المباراة لكل فريق؟","11 لاعب",200],
+["كم مدة المباراة الأساسية؟","90 دقيقة",200],
+["ما البطولة الأشهر للمنتخبات؟","كأس العالم",400],
+["كل كم سنة يقام كأس العالم؟","كل أربع سنوات",400],
+["ماذا تسمى ثلاث أهداف للاعب واحد؟","هاتريك",600],
+["كم نقطة يحصل عليها الفريق عند الفوز؟","3 نقاط",600]
+]},
+
+"عواصم":{
+icon:"🌍",
+questions:[
+["ما عاصمة السعودية؟","الرياض",200],
+["ما عاصمة فرنسا؟","باريس",200],
+["ما عاصمة اليابان؟","طوكيو",400],
+["ما عاصمة كندا؟","أوتاوا",400],
+["ما عاصمة أستراليا؟","كانبيرا",600],
+["ما عاصمة البرازيل؟","برازيليا",600]
+]},
+
+"أفلام":{
+icon:"🎬",
+questions:[
+["ما اسم مدرسة هاري بوتر؟","Hogwarts",200],
+["من هو Iron Man؟","Tony Stark",200],
+["ما اسم عالم Avatar؟","Pandora",400],
+["ما اسم الأسد في The Lion King؟","Simba",400],
+["من أخرج Titanic؟","James Cameron",600],
+["في أي سنة صدر Titanic؟","1997",600]
+]},
+
+"ألعاب":{
+icon:"🎮",
+questions:[
+["من بطل God of War؟","Kratos",200],
+["من تصنع PlayStation؟","Sony",200],
+["ما أشهر لعبة بناء بالمكعبات؟","Minecraft",400],
+["ما اسم مدينة GTA V؟","Los Santos",400],
+["من بطل سلسلة Uncharted؟","Nathan Drake",600],
+["ما اسم استوديو GTA؟","Rockstar Games",600]
+]},
+
+"معلومات عامة":{
+icon:"🧠",
+questions:[
+["كم عدد أيام الأسبوع؟","7",200],
+["كم عدد أشهر السنة؟","12",200],
+["ما أكبر محيط بالعالم؟","المحيط الهادئ",400],
+["ما الكوكب الأحمر؟","المريخ",400],
+["ما أكبر كوكب في المجموعة الشمسية؟","المشتري",600],
+["ما أسرع حيوان بري؟","الفهد",600]
+]},
+
+"الحيوانات":{
+icon:"🦁",
+questions:[
+["ما الحيوان الملقب بملك الغابة؟","الأسد",200],
+["ما أكبر حيوان في العالم؟","الحوت الأزرق",200],
+["كم رجل للعنكبوت؟","8",400],
+["ما أسرع طائر؟","الصقر الشاهين",400],
+["ما الحيوان الذي يستطيع تغيير لونه؟","الحرباء",600],
+["ما أطول حيوان بري؟","الزرافة",600]
+]},
+
+"تقنية":{
+icon:"💻",
+questions:[
+["من تصنع iPhone؟","Apple",200],
+["ما أشهر محرك بحث؟","Google",200],
+["ما معنى AI؟","الذكاء الاصطناعي",400],
+["من تصنع Windows؟","Microsoft",400],
+["ما اللغة الأساسية لصفحات الويب؟","HTML",600],
+["ماذا تعني CPU؟","وحدة المعالجة المركزية",600]
+]}
+
+};
+
+let selected=[];
+
+let team1="";
+let team2="";
+
+let score1=0;
+let score2=0;
+
+let currentValue=0;
+let currentButton=null;
+
+let timerInterval;
+
+function showScreen(id){
+
+document.querySelectorAll(".screen")
+.forEach(x=>x.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+}
+
+function goCategories(){
+
+team1=
+document.getElementById("team1Input").value||"الفريق الأول";
+
+team2=
+document.getElementById("team2Input").value||"الفريق الثاني";
+
+renderCategories();
+
+showScreen("categoryScreen");
+
+}
+
+function renderCategories(){
+
+const box=document.getElementById("categories");
+
+box.innerHTML="";
+
+Object.keys(data).forEach(name=>{
+
+const btn=document.createElement("button");
+
+btn.className="category";
+
+btn.innerHTML=
+"<span>"+data[name].icon+"</span>"+name;
+
+btn.onclick=()=>{
+
+if(selected.includes(name)){
+
+selected=selected.filter(x=>x!==name);
+
+btn.classList.remove("selected");
+
+}else{
+
+if(selected.length>=6){
+
+alert("تقدر تختار 6 فئات فقط");
+
+return;
+
+}
+
+selected.push(name);
+
+btn.classList.add("selected");
+
+}
+
+document.getElementById("selectedCount")
+.innerText=selected.length;
+
+};
+
+box.appendChild(btn);
+
+});
+
+}
+
+function startGame(){
+
+if(selected.length!==6){
+
+alert("لازم تختار 6 فئات");
+
+return;
+
+}
+
+document.getElementById("team1Name").innerText=team1;
+
+document.getElementById("team2Name").innerText=team2;
+
+buildBoard();
+
+showScreen("game");
+
+}
+
+function buildBoard(){
+
+const board=document.getElementById("board");
+
+board.innerHTML="";
+
+selected.forEach(category=>{
+
+const col=document.createElement("div");
+
+col.className="column";
+
+const head=document.createElement("div");
+
+head.className="category-head";
+
+head.innerHTML=
+data[category].icon+"<br>"+category;
+
+col.appendChild(head);
+
+data[category].questions.forEach((q,index)=>{
+
+const btn=document.createElement("button");
+
+btn.className="question-btn";
+
+btn.innerText=q[2];
+
+btn.onclick=()=>openQuestion(category,index,btn);
+
+col.appendChild(btn);
+
+});
+
+board.appendChild(col);
+
+});
+
+}
+
+function openQuestion(category,index,button){
+
+const q=data[category].questions[index];
+
+currentValue=q[2];
+
+currentButton=button;
+
+document.getElementById("questionValue")
+.innerText=currentValue+" نقطة";
+
+document.getElementById("questionText")
+.innerText=q[0];
+
+document.getElementById("answer")
+.innerText=q[1];
+
+document.getElementById("answer")
+.classList.remove("show");
+
+document.getElementById("questionModal")
+.classList.add("active");
+
+startTimer();
+
+}
+
+function startTimer(){
+
+clearInterval(timerInterval);
+
+let time=30;
+
+document.getElementById("timer").innerText=time;
+
+timerInterval=setInterval(()=>{
+
+time--;
+
+document.getElementById("timer").innerText=time;
+
+if(time<=0){
+
+clearInterval(timerInterval);
+
+}
+
+},1000);
+
+}
+
+function showAnswer(){
+
+document.getElementById("answer")
+.classList.add("show");
+
+}
+
+function givePoints(team){
+
+if(team===1){
+
+score1+=currentValue;
+
+document.getElementById("score1")
+.innerText=score1;
+
+}else{
+
+score2+=currentValue;
+
+document.getElementById("score2")
+.innerText=score2;
+
+}
+
+closeQuestion();
+
+}
+
+function closeQuestion(){
+
+clearInterval(timerInterval);
+
+if(currentButton){
+
+currentButton.classList.add("used");
+
+}
+
+document.getElementById("questionModal")
+.classList.remove("active");
+
+checkFinish();
+
+}
+
+function checkFinish(){
+
+const buttons=
+document.querySelectorAll(".question-btn");
+
+const used=
+document.querySelectorAll(".question-btn.used");
+
+if(buttons.length===used.length){
+
+setTimeout(endGame,500);
+
+}
+
+}
+
+function endGame(){
+
+let text="";
+
+if(score1>score2){
+
+text="🎉 "+team1+
+" يفوز بنتيجة "+
+score1+" نقطة!";
+
+}else if(score2>score1){
+
+text="🎉 "+team2+
+" يفوز بنتيجة "+
+score2+" نقطة!";
+
+}else{
+
+text="🤝 تعادل! "+score1+" نقطة لكل فريق";
+
+}
+
+document.getElementById("winnerText")
+.innerText=text;
+
+showScreen("finish");
+
+}
+
+</script>
+
+</body>
+</html>
