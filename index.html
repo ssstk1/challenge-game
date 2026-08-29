@@ -1,869 +1,866 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تحدي</title>
 
-<title>تحدي</title>
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Arial,Tahoma,sans-serif;
+    }
 
-<style>
+    body{
+      min-height:100vh;
+      background:linear-gradient(135deg,#0b1020,#191f3f,#34125a);
+      color:#fff;
+    }
 
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
-font-family:Arial,Tahoma,sans-serif;
-}
+    .screen{
+      display:none;
+      min-height:100vh;
+      padding:24px;
+    }
 
-body{
-min-height:100vh;
-background:linear-gradient(135deg,#090d1a,#171f3b,#31105a);
-color:white;
-}
+    .screen.active{
+      display:block;
+    }
 
-.screen{
-display:none;
-min-height:100vh;
-padding:25px;
-}
+    .container{
+      max-width:1280px;
+      margin:auto;
+    }
 
-.screen.active{
-display:block;
-}
+    .logo{
+      font-size:56px;
+      font-weight:900;
+      text-align:center;
+      margin-top:40px;
+      background:linear-gradient(90deg,#8b5cf6,#22d3ee,#fbbf24);
+      -webkit-background-clip:text;
+      color:transparent;
+    }
 
-.container{
-max-width:1200px;
-margin:auto;
-}
+    .subtitle{
+      text-align:center;
+      color:#cad2e3;
+      margin:14px 0 32px;
+      font-size:20px;
+      line-height:1.7;
+    }
 
-.logo{
-font-size:55px;
-font-weight:900;
-text-align:center;
-margin-top:60px;
-background:linear-gradient(90deg,#8b5cf6,#22d3ee);
--webkit-background-clip:text;
-color:transparent;
-}
+    .card{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(15px);
+      border-radius:28px;
+      padding:24px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
 
-.subtitle{
-text-align:center;
-color:#b9c0d4;
-font-size:20px;
-margin:12px 0 40px;
-}
+    h2.section-title{
+      text-align:center;
+      font-size:28px;
+      margin-bottom:20px;
+    }
 
-.card{
-background:rgba(255,255,255,.08);
-border:1px solid rgba(255,255,255,.13);
-backdrop-filter:blur(15px);
-border-radius:25px;
-padding:25px;
-box-shadow:0 20px 60px rgba(0,0,0,.3);
-}
+    input{
+      width:100%;
+      padding:16px;
+      border-radius:16px;
+      border:1px solid #3c4a73;
+      background:#12192d;
+      color:#fff;
+      font-size:17px;
+      margin-bottom:14px;
+      outline:none;
+    }
 
-input{
-width:100%;
-padding:17px;
-border-radius:15px;
-border:1px solid #3b4668;
-background:#11182c;
-color:white;
-font-size:18px;
-outline:none;
-margin-bottom:14px;
-}
+    button{
+      border:none;
+      cursor:pointer;
+      transition:.2s;
+    }
 
-button{
-border:0;
-cursor:pointer;
-transition:.2s;
-}
+    button:hover{
+      transform:translateY(-2px);
+    }
 
-button:hover{
-transform:scale(1.03);
-}
+    .primary{
+      width:100%;
+      padding:16px;
+      border-radius:16px;
+      background:linear-gradient(90deg,#7c3aed,#2563eb);
+      color:#fff;
+      font-size:18px;
+      font-weight:700;
+    }
 
-.primary{
-width:100%;
-background:linear-gradient(90deg,#7c3aed,#2563eb);
-color:white;
-padding:17px;
-font-size:19px;
-font-weight:bold;
-border-radius:16px;
-margin-top:10px;
-}
+    .note{
+      text-align:center;
+      color:#cbd5e1;
+      margin-top:14px;
+      line-height:1.8;
+      font-size:15px;
+    }
 
-.section-title{
-font-size:27px;
-text-align:center;
-margin-bottom:25px;
-}
+    .categories{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+      gap:14px;
+      margin-top:18px;
+    }
 
-.categories{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:16px;
-}
+    .category{
+      background:#151c31;
+      border:2px solid transparent;
+      color:#fff;
+      padding:20px 12px;
+      border-radius:20px;
+      min-height:120px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      font-weight:700;
+      font-size:18px;
+      line-height:1.4;
+    }
 
-.category{
-background:#151d33;
-border:2px solid transparent;
-color:white;
-padding:25px 15px;
-border-radius:20px;
-font-size:18px;
-font-weight:bold;
-}
+    .category span{
+      font-size:34px;
+      display:block;
+      margin-bottom:10px;
+    }
 
-.category span{
-display:block;
-font-size:35px;
-margin-bottom:10px;
-}
+    .category.selected{
+      border-color:#8b5cf6;
+      background:#26174d;
+      box-shadow:0 0 0 3px rgba(139,92,246,.15);
+    }
 
-.category.selected{
-border-color:#8b5cf6;
-background:#241545;
-}
+    .select-count{
+      text-align:center;
+      margin:20px 0 10px;
+      color:#ddd6fe;
+      font-size:18px;
+    }
 
-.select-count{
-text-align:center;
-margin:20px;
-font-size:18px;
-color:#c4b5fd;
-}
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:22px;
+      flex-wrap:wrap;
+    }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:15px;
-margin-bottom:22px;
-}
+    .team-score{
+      background:#10172b;
+      border:1px solid #2f3b5d;
+      border-radius:20px;
+      padding:14px 22px;
+      text-align:center;
+      min-width:180px;
+      flex:1;
+    }
 
-.team-score{
-background:#12192c;
-border:1px solid #29324d;
-padding:15px 22px;
-border-radius:18px;
-text-align:center;
-min-width:160px;
-}
+    .team-name{
+      color:#c9d4ea;
+      font-size:15px;
+      margin-bottom:6px;
+    }
 
-.team-name{
-font-size:16px;
-color:#aab3ca;
-}
+    .points{
+      font-size:34px;
+      font-weight:900;
+    }
 
-.points{
-font-size:32px;
-font-weight:900;
-}
+    .main-title{
+      font-size:26px;
+      font-weight:900;
+      text-align:center;
+      flex:1;
+    }
 
-.board{
-display:grid;
-grid-template-columns:repeat(6,1fr);
-gap:12px;
-overflow-x:auto;
-padding-bottom:10px;
-}
+    .board{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:12px;
+      overflow-x:auto;
+      padding-bottom:10px;
+    }
 
-.column{
-min-width:145px;
-}
+    .column{
+      min-width:150px;
+    }
 
-.category-head{
-height:100px;
-display:flex;
-justify-content:center;
-align-items:center;
-text-align:center;
-background:linear-gradient(135deg,#4c1d95,#1d4ed8);
-border-radius:16px;
-font-weight:bold;
-padding:10px;
-margin-bottom:10px;
-}
+    .category-head{
+      height:110px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#4c1d95,#1d4ed8);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:10px;
+      font-weight:800;
+      line-height:1.4;
+      margin-bottom:10px;
+      font-size:18px;
+    }
 
-.question-btn{
-width:100%;
-height:78px;
-margin-bottom:10px;
-border-radius:15px;
-background:#151d33;
-border:1px solid #313d5e;
-color:#fbbf24;
-font-size:27px;
-font-weight:900;
-}
+    .question-btn{
+      width:100%;
+      height:78px;
+      margin-bottom:10px;
+      border-radius:16px;
+      background:#15203b;
+      border:1px solid #344165;
+      color:#fbbf24;
+      font-size:28px;
+      font-weight:900;
+    }
 
-.question-btn.used{
-opacity:.2;
-pointer-events:none;
-}
+    .question-btn.used{
+      opacity:.18;
+      pointer-events:none;
+      filter:grayscale(1);
+    }
 
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.82);
-display:none;
-align-items:center;
-justify-content:center;
-padding:20px;
-z-index:100;
-}
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.86);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:1000;
+    }
 
-.modal.active{
-display:flex;
-}
+    .modal.active{
+      display:flex;
+    }
 
-.question-card{
-max-width:750px;
-width:100%;
-background:#12182c;
-border:1px solid #35415f;
-border-radius:30px;
-padding:35px;
-text-align:center;
-}
+    .question-card{
+      width:100%;
+      max-width:850px;
+      background:#11192c;
+      border:1px solid #32415f;
+      border-radius:28px;
+      padding:24px;
+      text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.45);
+    }
 
-.question-value{
-color:#fbbf24;
-font-size:21px;
-font-weight:bold;
-}
+    .question-meta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
 
-.question-text{
-font-size:31px;
-line-height:1.7;
-margin:30px 0;
-}
+    .question-category,
+    .question-value{
+      background:#1b2440;
+      border:1px solid #344165;
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:700;
+      color:#fff;
+    }
 
-.timer{
-font-size:50px;
-font-weight:900;
-margin:15px;
-}
+    .question-value{
+      color:#fbbf24;
+    }
 
-.answer{
-display:none;
-font-size:27px;
-padding:20px;
-border-radius:18px;
-background:rgba(34,197,94,.13);
-border:1px solid #22c55e;
-margin:20px 0;
-}
+    .timer{
+      font-size:46px;
+      font-weight:900;
+      margin:10px 0 16px;
+      color:#22d3ee;
+    }
 
-.answer.show{
-display:block;
-}
+    .question-image-wrap{
+      margin:14px auto 18px;
+      border-radius:22px;
+      overflow:hidden;
+      max-width:100%;
+      background:#0f172a;
+      border:1px solid #32415f;
+    }
 
-.actions{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-justify-content:center;
-}
+    .question-image{
+      width:100%;
+      display:block;
+      max-height:300px;
+      object-fit:cover;
+    }
 
-.action{
-padding:14px 20px;
-border-radius:14px;
-font-weight:bold;
-font-size:16px;
-}
+    .question-text{
+      font-size:29px;
+      line-height:1.8;
+      margin:16px 0 20px;
+    }
 
-.show-answer{
-background:#7c3aed;
-color:white;
-}
+    .answer{
+      display:none;
+      font-size:26px;
+      line-height:1.7;
+      padding:18px;
+      border-radius:18px;
+      margin:16px 0 20px;
+      background:rgba(34,197,94,.13);
+      border:1px solid #22c55e;
+      color:#fff;
+    }
 
-.team1{
-background:#2563eb;
-color:white;
-}
+    .answer.show{
+      display:block;
+    }
 
-.team2{
-background:#e11d48;
-color:white;
-}
+    .actions{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
 
-.no-answer{
-background:#374151;
-color:white;
-}
+    .action{
+      padding:14px 18px;
+      border-radius:14px;
+      font-size:16px;
+      font-weight:800;
+      color:#fff;
+    }
 
-.winner{
-text-align:center;
-padding-top:100px;
-}
+    .show-answer{
+      background:#7c3aed;
+    }
 
-.winner h1{
-font-size:60px;
-margin-bottom:20px;
-}
+    .team1{
+      background:#2563eb;
+    }
 
-.winner p{
-font-size:28px;
-color:#fbbf24;
-}
+    .team2{
+      background:#e11d48;
+    }
 
-@media(max-width:700px){
+    .no-answer{
+      background:#475569;
+    }
 
-.logo{
-font-size:42px;
-}
+    .finish-box{
+      max-width:700px;
+      margin:90px auto 0;
+      text-align:center;
+    }
 
-.board{
-grid-template-columns:repeat(6,145px);
-}
+    .finish-box h1{
+      font-size:56px;
+      margin-bottom:16px;
+    }
 
-.topbar{
-flex-direction:column;
-}
+    .finish-box p{
+      font-size:28px;
+      color:#fbbf24;
+      margin-bottom:24px;
+      line-height:1.6;
+    }
 
-.team-score{
-width:100%;
-}
+    .small-help{
+      text-align:center;
+      color:#cbd5e1;
+      margin-bottom:22px;
+    }
 
-.question-text{
-font-size:24px;
-}
+    @media(max-width:900px){
+      .board{
+        grid-template-columns:repeat(6,150px);
+      }
 
-}
+      .question-text{
+        font-size:24px;
+      }
 
-</style>
+      .logo{
+        font-size:42px;
+      }
+
+      .finish-box h1{
+        font-size:42px;
+      }
+
+      .finish-box p{
+        font-size:22px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- البداية -->
-
-<section id="start" class="screen active">
-
-<div class="container">
-
-<div class="logo">تحدي 🔥</div>
-
-<div class="subtitle">
-اختبر معلوماتك وتحدى أصحابك
-</div>
-
-<div class="card" style="max-width:550px;margin:auto">
-
-<h2 class="section-title">من بيلعب اليوم؟</h2>
-
-<input id="team1Input" value="الفريق الأول" placeholder="اسم الفريق الأول">
-
-<input id="team2Input" value="الفريق الثاني" placeholder="اسم الفريق الثاني">
-
-<button class="primary" onclick="goCategories()">
-اختيار الفئات
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- الفئات -->
-
-<section id="categoryScreen" class="screen">
-
-<div class="container">
-
-<h1 class="section-title">اختار 6 فئات</h1>
-
-<div class="categories" id="categories"></div>
-
-<div class="select-count">
-تم اختيار <span id="selectedCount">0</span> من 6
-</div>
-
-<button class="primary" onclick="startGame()">
-ابدأ اللعبة 🚀
-</button>
-
-</div>
-
-</section>
-
-<!-- لوحة اللعبة -->
-
-<section id="game" class="screen">
-
-<div class="container">
-
-<div class="topbar">
-
-<div class="team-score">
-<div class="team-name" id="team1Name"></div>
-<div class="points" id="score1">0</div>
-</div>
-
-<h2>🔥 تحدي</h2>
-
-<div class="team-score">
-<div class="team-name" id="team2Name"></div>
-<div class="points" id="score2">0</div>
-</div>
-
-</div>
-
-<div class="board" id="board"></div>
-
-</div>
-
-</section>
-
-<!-- السؤال -->
-
-<div class="modal" id="questionModal">
-
-<div class="question-card">
-
-<div class="question-value" id="questionValue"></div>
-
-<div class="timer" id="timer">30</div>
-
-<div class="question-text" id="questionText"></div>
-
-<div class="answer" id="answer"></div>
-
-<div class="actions">
-
-<button class="action show-answer" onclick="showAnswer()">
-إظهار الإجابة
-</button>
-
-<button class="action team1" onclick="givePoints(1)">
-✓ الفريق الأول
-</button>
-
-<button class="action team2" onclick="givePoints(2)">
-✓ الفريق الثاني
-</button>
-
-<button class="action no-answer" onclick="closeQuestion()">
-لا أحد
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- النهاية -->
-
-<section id="finish" class="screen">
-
-<div class="winner">
-
-<h1>🏆 انتهت اللعبة</h1>
-
-<p id="winnerText"></p>
-
-<button class="primary"
-style="max-width:350px"
-onclick="location.reload()">
-
-لعبة جديدة
-
-</button>
-
-</div>
-
-</section>
-
-<script>
-
-const data={
-
-"الإمارات":{
-icon:"🇦🇪",
-questions:[
-["في أي سنة تأسست دولة الإمارات؟","1971",200],
-["كم عدد إمارات دولة الإمارات؟","7 إمارات",200],
-["من هو مؤسس دولة الإمارات؟","الشيخ زايد بن سلطان آل نهيان",400],
-["ما أكبر إمارة من حيث المساحة؟","أبوظبي",400],
-["ما أعلى جبل في الإمارات؟","جبل جيس",600],
-["في أي إمارة يقع جبل جيس؟","رأس الخيمة",600]
-]},
-
-"كرة القدم":{
-icon:"⚽",
-questions:[
-["كم لاعباً يبدأ المباراة لكل فريق؟","11 لاعب",200],
-["كم مدة المباراة الأساسية؟","90 دقيقة",200],
-["ما البطولة الأشهر للمنتخبات؟","كأس العالم",400],
-["كل كم سنة يقام كأس العالم؟","كل أربع سنوات",400],
-["ماذا تسمى ثلاث أهداف للاعب واحد؟","هاتريك",600],
-["كم نقطة يحصل عليها الفريق عند الفوز؟","3 نقاط",600]
-]},
-
-"عواصم":{
-icon:"🌍",
-questions:[
-["ما عاصمة السعودية؟","الرياض",200],
-["ما عاصمة فرنسا؟","باريس",200],
-["ما عاصمة اليابان؟","طوكيو",400],
-["ما عاصمة كندا؟","أوتاوا",400],
-["ما عاصمة أستراليا؟","كانبيرا",600],
-["ما عاصمة البرازيل؟","برازيليا",600]
-]},
-
-"أفلام":{
-icon:"🎬",
-questions:[
-["ما اسم مدرسة هاري بوتر؟","Hogwarts",200],
-["من هو Iron Man؟","Tony Stark",200],
-["ما اسم عالم Avatar؟","Pandora",400],
-["ما اسم الأسد في The Lion King؟","Simba",400],
-["من أخرج Titanic؟","James Cameron",600],
-["في أي سنة صدر Titanic؟","1997",600]
-]},
-
-"ألعاب":{
-icon:"🎮",
-questions:[
-["من بطل God of War؟","Kratos",200],
-["من تصنع PlayStation؟","Sony",200],
-["ما أشهر لعبة بناء بالمكعبات؟","Minecraft",400],
-["ما اسم مدينة GTA V؟","Los Santos",400],
-["من بطل سلسلة Uncharted؟","Nathan Drake",600],
-["ما اسم استوديو GTA؟","Rockstar Games",600]
-]},
-
-"معلومات عامة":{
-icon:"🧠",
-questions:[
-["كم عدد أيام الأسبوع؟","7",200],
-["كم عدد أشهر السنة؟","12",200],
-["ما أكبر محيط بالعالم؟","المحيط الهادئ",400],
-["ما الكوكب الأحمر؟","المريخ",400],
-["ما أكبر كوكب في المجموعة الشمسية؟","المشتري",600],
-["ما أسرع حيوان بري؟","الفهد",600]
-]},
-
-"الحيوانات":{
-icon:"🦁",
-questions:[
-["ما الحيوان الملقب بملك الغابة؟","الأسد",200],
-["ما أكبر حيوان في العالم؟","الحوت الأزرق",200],
-["كم رجل للعنكبوت؟","8",400],
-["ما أسرع طائر؟","الصقر الشاهين",400],
-["ما الحيوان الذي يستطيع تغيير لونه؟","الحرباء",600],
-["ما أطول حيوان بري؟","الزرافة",600]
-]},
-
-"تقنية":{
-icon:"💻",
-questions:[
-["من تصنع iPhone؟","Apple",200],
-["ما أشهر محرك بحث؟","Google",200],
-["ما معنى AI؟","الذكاء الاصطناعي",400],
-["من تصنع Windows؟","Microsoft",400],
-["ما اللغة الأساسية لصفحات الويب؟","HTML",600],
-["ماذا تعني CPU؟","وحدة المعالجة المركزية",600]
-]}
-
-};
-
-let selected=[];
-
-let team1="";
-let team2="";
-
-let score1=0;
-let score2=0;
-
-let currentValue=0;
-let currentButton=null;
-
-let timerInterval;
-
-function showScreen(id){
-
-document.querySelectorAll(".screen")
-.forEach(x=>x.classList.remove("active"));
-
-document.getElementById(id)
-.classList.add("active");
-
-}
-
-function goCategories(){
-
-team1=
-document.getElementById("team1Input").value||"الفريق الأول";
-
-team2=
-document.getElementById("team2Input").value||"الفريق الثاني";
-
-renderCategories();
-
-showScreen("categoryScreen");
-
-}
-
-function renderCategories(){
-
-const box=document.getElementById("categories");
-
-box.innerHTML="";
-
-Object.keys(data).forEach(name=>{
-
-const btn=document.createElement("button");
-
-btn.className="category";
-
-btn.innerHTML=
-"<span>"+data[name].icon+"</span>"+name;
-
-btn.onclick=()=>{
-
-if(selected.includes(name)){
-
-selected=selected.filter(x=>x!==name);
-
-btn.classList.remove("selected");
-
-}else{
-
-if(selected.length>=6){
-
-alert("تقدر تختار 6 فئات فقط");
-
-return;
-
-}
-
-selected.push(name);
-
-btn.classList.add("selected");
-
-}
-
-document.getElementById("selectedCount")
-.innerText=selected.length;
-
-};
-
-box.appendChild(btn);
-
-});
-
-}
-
-function startGame(){
-
-if(selected.length!==6){
-
-alert("لازم تختار 6 فئات");
-
-return;
-
-}
-
-document.getElementById("team1Name").innerText=team1;
-
-document.getElementById("team2Name").innerText=team2;
-
-buildBoard();
-
-showScreen("game");
-
-}
-
-function buildBoard(){
-
-const board=document.getElementById("board");
-
-board.innerHTML="";
-
-selected.forEach(category=>{
-
-const col=document.createElement("div");
-
-col.className="column";
-
-const head=document.createElement("div");
-
-head.className="category-head";
-
-head.innerHTML=
-data[category].icon+"<br>"+category;
-
-col.appendChild(head);
-
-data[category].questions.forEach((q,index)=>{
-
-const btn=document.createElement("button");
-
-btn.className="question-btn";
-
-btn.innerText=q[2];
-
-btn.onclick=()=>openQuestion(category,index,btn);
-
-col.appendChild(btn);
-
-});
-
-board.appendChild(col);
-
-});
-
-}
-
-function openQuestion(category,index,button){
-
-const q=data[category].questions[index];
-
-currentValue=q[2];
-
-currentButton=button;
-
-document.getElementById("questionValue")
-.innerText=currentValue+" نقطة";
-
-document.getElementById("questionText")
-.innerText=q[0];
-
-document.getElementById("answer")
-.innerText=q[1];
-
-document.getElementById("answer")
-.classList.remove("show");
-
-document.getElementById("questionModal")
-.classList.add("active");
-
-startTimer();
-
-}
-
-function startTimer(){
-
-clearInterval(timerInterval);
-
-let time=30;
-
-document.getElementById("timer").innerText=time;
-
-timerInterval=setInterval(()=>{
-
-time--;
-
-document.getElementById("timer").innerText=time;
-
-if(time<=0){
-
-clearInterval(timerInterval);
-
-}
-
-},1000);
-
-}
-
-function showAnswer(){
-
-document.getElementById("answer")
-.classList.add("show");
-
-}
-
-function givePoints(team){
-
-if(team===1){
-
-score1+=currentValue;
-
-document.getElementById("score1")
-.innerText=score1;
-
-}else{
-
-score2+=currentValue;
-
-document.getElementById("score2")
-.innerText=score2;
-
-}
-
-closeQuestion();
-
-}
-
-function closeQuestion(){
-
-clearInterval(timerInterval);
-
-if(currentButton){
-
-currentButton.classList.add("used");
-
-}
-
-document.getElementById("questionModal")
-.classList.remove("active");
-
-checkFinish();
-
-}
-
-function checkFinish(){
-
-const buttons=
-document.querySelectorAll(".question-btn");
-
-const used=
-document.querySelectorAll(".question-btn.used");
-
-if(buttons.length===used.length){
-
-setTimeout(endGame,500);
-
-}
-
-}
-
-function endGame(){
-
-let text="";
-
-if(score1>score2){
-
-text="🎉 "+team1+
-" يفوز بنتيجة "+
-score1+" نقطة!";
-
-}else if(score2>score1){
-
-text="🎉 "+team2+
-" يفوز بنتيجة "+
-score2+" نقطة!";
-
-}else{
-
-text="🤝 تعادل! "+score1+" نقطة لكل فريق";
-
-}
-
-document.getElementById("winnerText")
-.innerText=text;
-
-showScreen("finish");
-
-}
-
-</script>
-
+  <!-- شاشة البداية -->
+  <section id="start" class="screen active">
+    <div class="container">
+      <div class="logo">تحدي 🔥</div>
+      <div class="subtitle">
+        لعبة جماعية بأسئلة وصور وصعوبة أعلى شوي<br>
+        اختر 6 فئات فقط — وكل سؤال يظهر مرة واحدة فقط بدون تكرار
+      </div>
+
+      <div class="card" style="max-width:560px;margin:auto;">
+        <h2 class="section-title">ابدأ اللعبة</h2>
+        <input id="team1Input" value="الفريق الأول" placeholder="اسم الفريق الأول">
+        <input id="team2Input" value="الفريق الثاني" placeholder="اسم الفريق الثاني">
+        <button class="primary" onclick="goCategories()">اختيار الفئات</button>
+        <div class="note">
+          الفئات الجديدة تشمل: مصر، السعودية، البحرين، راشد الماجد،
+          عبدالمجيد، الإسكندرية، ألغاز، خمن الكلمة، بلوت، سيارات، حسين الجسمي، سوريا
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- شاشة اختيار الفئات -->
+  <section id="categoryScreen" class="screen">
+    <div class="container">
+      <h2 class="section-title">اختر 6 فئات</h2>
+      <div class="small-help">كل لعبة تختار فيها 6 فئات فقط من الفئات المتاحة</div>
+      <div class="categories" id="categories"></div>
+      <div class="select-count">تم اختيار <span id="selectedCount">0</span> من 6</div>
+      <button class="primary" onclick="startGame()">ابدأ اللعبة 🚀</button>
+    </div>
+  </section>
+
+  <!-- شاشة اللعبة -->
+  <section id="game" class="screen">
+    <div class="container">
+      <div class="topbar">
+        <div class="team-score">
+          <div class="team-name" id="team1Name"></div>
+          <div class="points" id="score1">0</div>
+        </div>
+
+        <div class="main-title">🔥 تحدي</div>
+
+        <div class="team-score">
+          <div class="team-name" id="team2Name"></div>
+          <div class="points" id="score2">0</div>
+        </div>
+      </div>
+
+      <div class="small-help">كل سؤال إذا انفتح ينقفل نهائيًا — ما يتكرر أبدًا داخل نفس اللعبة</div>
+      <div class="board" id="board"></div>
+    </div>
+  </section>
+
+  <!-- نافذة السؤال -->
+  <div class="modal" id="questionModal">
+    <div class="question-card">
+      <div class="question-meta">
+        <div class="question-category" id="questionCategory">الفئة</div>
+        <div class="question-value" id="questionValue">200 نقطة</div>
+      </div>
+
+      <div class="timer" id="timer">35</div>
+
+      <div class="question-image-wrap">
+        <img id="questionImage" class="question-image" src="" alt="صورة السؤال">
+      </div>
+
+      <div class="question-text" id="questionText"></div>
+      <div class="answer" id="answer"></div>
+
+      <div class="actions">
+        <button class="action show-answer" onclick="showAnswer()">إظهار الإجابة</button>
+        <button class="action team1" onclick="givePoints(1)">✓ الفريق الأول</button>
+        <button class="action team2" onclick="givePoints(2)">✓ الفريق الثاني</button>
+        <button class="action no-answer" onclick="closeQuestion()">لا أحد</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- شاشة النهاية -->
+  <section id="finish" class="screen">
+    <div class="container">
+      <div class="finish-box card">
+        <h1>🏆 انتهت اللعبة</h1>
+        <p id="winnerText"></p>
+        <button class="primary" style="max-width:320px;margin:auto;display:block;" onclick="location.reload()">
+          لعبة جديدة
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function makeCard(title, subtitle, emoji){
+      const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#4f46e5"/>
+            <stop offset="50%" stop-color="#7c3aed"/>
+            <stop offset="100%" stop-color="#0ea5e9"/>
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="700" fill="url(#g)"/>
+        <circle cx="150" cy="120" r="90" fill="rgba(255,255,255,0.12)"/>
+        <circle cx="1060" cy="580" r="120" fill="rgba(255,255,255,0.10)"/>
+        <text x="600" y="220" text-anchor="middle" font-size="120" font-family="Arial" fill="white">${emoji}</text>
+        <text x="600" y="340" text-anchor="middle" font-size="64" font-family="Arial" font-weight="700" fill="white">${title}</text>
+        <text x="600" y="430" text-anchor="middle" font-size="38" font-family="Arial" fill="#e5e7eb">${subtitle}</text>
+        <text x="600" y="560" text-anchor="middle" font-size="28" font-family="Arial" fill="#fef3c7">تحدي</text>
+      </svg>
+      `;
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+    }
+
+    function Q(q,a,points,title,subtitle,emoji){
+      return {
+        q:q,
+        a:a,
+        points:points,
+        img:makeCard(title,subtitle,emoji)
+      };
+    }
+
+    const data = {
+      "مصر": {
+        icon: "🇪🇬",
+        questions: [
+          Q("ما عاصمة جمهورية مصر العربية؟","القاهرة",200,"مصر","عاصمة عربية مشهورة","🏙️"),
+          Q("ما اسم الممر المائي الذي يربط البحر الأحمر بالبحر المتوسط؟","قناة السويس",200,"مصر","ممر ملاحي عالمي","🚢"),
+          Q("على أي هضبة تقع أهرامات الجيزة؟","هضبة الجيزة",400,"مصر","آثار فرعونية شهيرة","🗿"),
+          Q("ما اسم النهر الذي يمر عبر مصر من الجنوب إلى الشمال؟","نهر النيل",400,"مصر","أطول نهر في المنطقة","🌊"),
+          Q("ما اسم السد الشهير الواقع في أسوان؟","السد العالي",600,"مصر","مشروع قومي معروف","🧱"),
+          Q("ما المدينة الساحلية المصرية المشهورة بلقب عروس البحر المتوسط؟","الإسكندرية",600,"مصر","مدينة ساحلية جميلة","🌅")
+        ]
+      },
+
+      "السعودية": {
+        icon: "🇸🇦",
+        questions: [
+          Q("ما عاصمة المملكة العربية السعودية؟","الرياض",200,"السعودية","عاصمة خليجية","🏙️"),
+          Q("ما هما المدينتان المقدستان في السعودية؟","مكة المكرمة والمدينة المنورة",200,"السعودية","أماكن مقدسة","🕋"),
+          Q("ما اسم أكبر صحراء رملية متصلة في السعودية؟","الربع الخالي",400,"السعودية","صحراء شاسعة جدًا","🏜️"),
+          Q("ما المنطقة السعودية المشهورة بآثار العلا؟","منطقة المدينة المنورة",400,"السعودية","العلا موقع مميز","🏛️"),
+          Q("ما أول عاصمة للدولة السعودية الأولى؟","الدرعية",600,"السعودية","تاريخ سعودي","📜"),
+          Q("ما اسم الميناء الشهير الواقع في جدة؟","ميناء جدة الإسلامي",600,"السعودية","ميناء بحري مهم","⚓")
+        ]
+      },
+
+      "البحرين": {
+        icon: "🇧🇭",
+        questions: [
+          Q("ما عاصمة مملكة البحرين؟","المنامة",200,"البحرين","عاصمة خليجية","🏙️"),
+          Q("ما اسم العملة الرسمية في البحرين؟","الدينار البحريني",200,"البحرين","عملة خليجية","💰"),
+          Q("ما اسم الجسر الذي يربط البحرين بالسعودية؟","جسر الملك فهد",400,"البحرين","جسر شهير","🌉"),
+          Q("ما اسم الحلبة التي تستضيف سباقات الفورمولا 1 في البحرين؟","حلبة البحرين الدولية",400,"البحرين","رياضة السيارات","🏎️"),
+          Q("ما اسم أكبر جزيرة في البحرين؟","جزيرة البحرين",600,"البحرين","أرخبيل خليجي","🏝️"),
+          Q("على أي مسطح مائي تقع البحرين؟","الخليج العربي",600,"البحرين","موقع جغرافي","🌊")
+        ]
+      },
+
+      "راشد الماجد": {
+        icon: "🎤",
+        questions: [
+          Q("من أي دولة الفنان راشد الماجد؟","السعودية",200,"راشد الماجد","فنان خليجي","🎙️"),
+          Q("أكمل اسم الأغنية: يا ...","ناسينا",200,"راشد الماجد","اسم أغنية مشهورة","🎵"),
+          Q("ما اسم الأغنية الشهيرة التي تبدأ بكلمة المسافر؟","المسافر",400,"راشد الماجد","أغنية معروفة","✈️"),
+          Q("أي فنان ارتبطت به أغنية كذاب؟","راشد الماجد",400,"راشد الماجد","أغنية خليجية","🎶"),
+          Q("ما نوع الفن الذي يشتهر به راشد الماجد أكثر شيء؟","الغناء الخليجي",600,"راشد الماجد","هوية فنية","🎼"),
+          Q("هل راشد الماجد يُعد من مطربي الخليج أم من مطربي المغرب العربي؟","من مطربي الخليج",600,"راشد الماجد","سؤال تركيز","🌍")
+        ]
+      },
+
+      "عبدالمجيد": {
+        icon: "🎼",
+        questions: [
+          Q("ما الاسم الكامل الشائع للفنان عبدالمجيد؟","عبدالمجيد عبدالله",200,"عبدالمجيد","فنان خليجي","🎤"),
+          Q("من أي دولة الفنان عبدالمجيد عبدالله؟","السعودية",200,"عبدالمجيد","معلومة فنية","🇸🇦"),
+          Q("أكمل اسم الأغنية: تتنفسك ...","دنياي",400,"عبدالمجيد","أغنية شهيرة","💜"),
+          Q("أي فنان غنى يا ابن الأوادم؟","عبدالمجيد عبدالله",400,"عبدالمجيد","أغنية معروفة","🎶"),
+          Q("هل يشتهر عبدالمجيد أكثر في اللون الخليجي أم الروك؟","اللون الخليجي",600,"عبدالمجيد","تمييز فني","🎵"),
+          Q("أي نوع من الأعمال اشتهر بها عبدالمجيد: الطرب الخليجي أم الراب الأمريكي؟","الطرب الخليجي",600,"عبدالمجيد","تركيز","🎙️")
+        ]
+      },
+
+      "الإسكندرية": {
+        icon: "🌊",
+        questions: [
+          Q("على أي بحر تقع مدينة الإسكندرية؟","البحر المتوسط",200,"الإسكندرية","مدينة ساحلية","🌅"),
+          Q("ما اللقب الشهير لمدينة الإسكندرية؟","عروس البحر المتوسط",200,"الإسكندرية","لقب معروف","👑"),
+          Q("ما اسم المكتبة الشهيرة الموجودة في الإسكندرية؟","مكتبة الإسكندرية",400,"الإسكندرية","معلم ثقافي","📚"),
+          Q("ما اسم القلعة الشهيرة المطلة على بحر الإسكندرية؟","قلعة قايتباي",400,"الإسكندرية","معلم تاريخي","🏰"),
+          Q("من الذي سميت الإسكندرية نسبة إليه؟","الإسكندر الأكبر",600,"الإسكندرية","تاريخ المدينة","⚔️"),
+          Q("في أي جهة من مصر تقع الإسكندرية؟","في شمال مصر",600,"الإسكندرية","سؤال جغرافي","🧭")
+        ]
+      },
+
+      "ألغاز": {
+        icon: "🧩",
+        questions: [
+          Q("شيء كلما أخذت منه كبر، ما هو؟","الحفرة",200,"ألغاز","فكر شوي","🕳️"),
+          Q("له أسنان ولا يعض، ما هو؟","المشط",200,"ألغاز","لغز مشهور","🪮"),
+          Q("يمشي بلا رجلين ويدخل الأذنين، ما هو؟","الصوت",400,"ألغاز","ركز","👂"),
+          Q("ما الشيء الذي إذا جاع كذب، وإذا شبع صدق؟","الساعة",400,"ألغاز","لغز تركيز","⏰"),
+          Q("ترى كل شيء وليس لها عيون، ما هي؟","المرآة",600,"ألغاز","تفكير","🪞"),
+          Q("ما الشيء الذي يكتب ولا يقرأ؟","القلم",600,"ألغاز","لغز بسيط خادع","✍️")
+        ]
+      },
+
+      "خمن الكلمة": {
+        icon: "❓",
+        questions: [
+          Q("خمن الكلمة من الرموز في الصورة","شاطئ",200,"خمن الكلمة","شمس + بحر + رمل","☀️🌊🏖️"),
+          Q("خمن الكلمة من الرموز في الصورة","سيارة",200,"خمن الكلمة","مقود + عجلة + طريق","🚗🛞🛣️"),
+          Q("خمن الكلمة من الرموز في الصورة","قوس قزح",400,"خمن الكلمة","مطر + شمس + ألوان","🌧️☀️🌈"),
+          Q("خمن الكلمة من الرموز في الصورة","هاتف",400,"خمن الكلمة","يد + شاشة + اتصال","📱☎️✨"),
+          Q("خمن الكلمة من الرموز في الصورة","كابتن",600,"خمن الكلمة","طائرة + قبعة + قيادة","✈️🧢🧭"),
+          Q("خمن الكلمة من الرموز في الصورة","كرة القدم",600,"خمن الكلمة","ملعب + كرة + جمهور","⚽🏟️👏")
+        ]
+      },
+
+      "بلوت": {
+        icon: "🃏",
+        questions: [
+          Q("كم عدد لاعبي البلوت في المباراة الواحدة؟","4 لاعبين",200,"بلوت","لعبة ورق شعبية","🃏"),
+          Q("كم ورقة تُوزع لكل لاعب في البلوت؟","13 ورقة",200,"بلوت","توزيع الأوراق","🖐️"),
+          Q("ما الاسمان الشائعان لنوعي اللعب في البلوت؟","حكم وصن",400,"بلوت","أنواع اللعب","🎴"),
+          Q("كم عدد أوراق اللعب المستخدمة في البلوت؟","32 ورقة",400,"بلوت","عدة اللعبة","📦"),
+          Q("في الحكم ما أعلى ورقة؟","الولد",600,"بلوت","ترتيب الأوراق","👑"),
+          Q("كم مجموع نقاط أوراق البلوت في اللعبة الكاملة؟","152",600,"بلوت","سؤال أصعب شوي","🔢")
+        ]
+      },
+
+      "سيارات": {
+        icon: "🚘",
+        questions: [
+          Q("أي شركة تصنع سيارة كورولا؟","تويوتا",200,"سيارات","شركة يابانية","🚗"),
+          Q("ماذا تعني اختصار SUV؟","مركبة رياضية متعددة الاستخدامات",200,"سيارات","اختصار مشهور","🚙"),
+          Q("ما الجزء الذي يشحن بطارية السيارة أثناء التشغيل؟","الدينمو",400,"سيارات","قطعة مهمة","🔋"),
+          Q("ما النظام الذي يمنع انغلاق المكابح عند الفرملة؟","ABS",400,"سيارات","سلامة السيارة","🛑"),
+          Q("ماذا يقيس عداد RPM؟","دورات المحرك في الدقيقة",600,"سيارات","معلومة تقنية","⚙️"),
+          Q("أي نوع وقود يستخدم عادة في محركات الديزل؟","الديزل",600,"سيارات","وقود المركبات","⛽")
+        ]
+      },
+
+      "حسين الجسمي": {
+        icon: "🎙️",
+        questions: [
+          Q("من أي دولة الفنان حسين الجسمي؟","الإمارات",200,"حسين الجسمي","فنان إماراتي","🇦🇪"),
+          Q("ما اسم الأغنية الوطنية المصرية الشهيرة لحسين الجسمي؟","بشرة خير",200,"حسين الجسمي","أغنية معروفة","🎵"),
+          Q("أكمل اسم الأغنية: بالبنط ...","العريض",400,"حسين الجسمي","أغنية مشهورة","👕"),
+          Q("ما اسم الأغنية الحزينة المعروفة لحسين الجسمي؟","فقدتك",400,"حسين الجسمي","أغنية مؤثرة","💔"),
+          Q("بأي لهجة غنى حسين الجسمي أغنية بشرة خير؟","اللهجة المصرية",600,"حسين الجسمي","تنويع فني","🇪🇬"),
+          Q("ما اللقب الذي يشتهر به حسين الجسمي؟","الجبل",600,"حسين الجسمي","لقب معروف","⛰️")
+        ]
+      },
+
+      "سوريا": {
+        icon: "🇸🇾",
+        questions: [
+          Q("ما عاصمة سوريا؟","دمشق",200,"سوريا","عاصمة عربية عريقة","🏙️"),
+          Q("ما اسم النهر الشهير الذي يمر في سوريا؟","نهر الفرات",200,"سوريا","نهر معروف","🌊"),
+          Q("ما المدينة السورية المعروفة بقلعتها الشهيرة؟","حلب",400,"سوريا","مدينة تاريخية","🏰"),
+          Q("ما أقدم عاصمة مأهولة باستمرار في العالم بحسب الشائع؟","دمشق",400,"سوريا","سؤال تاريخي","📜"),
+          Q("ما اسم المدينة الأثرية الشهيرة في البادية السورية؟","تدمر",600,"سوريا","آثار قديمة","🏛️"),
+          Q("ما البحر الذي تطل عليه مدينتا اللاذقية وطرطوس؟","البحر المتوسط",600,"سوريا","جغرافيا","🌅")
+        ]
+      }
+    };
+
+    let selected = [];
+    let team1 = "";
+    let team2 = "";
+    let score1 = 0;
+    let score2 = 0;
+    let currentValue = 0;
+    let currentButton = null;
+    let timerInterval = null;
+    let questionsOpened = 0;
+    let totalQuestions = 0;
+
+    function showScreen(id){
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+      document.getElementById(id).classList.add("active");
+    }
+
+    function goCategories(){
+      team1 = document.getElementById("team1Input").value.trim() || "الفريق الأول";
+      team2 = document.getElementById("team2Input").value.trim() || "الفريق الثاني";
+      renderCategories();
+      showScreen("categoryScreen");
+    }
+
+    function renderCategories(){
+      const box = document.getElementById("categories");
+      box.innerHTML = "";
+
+      Object.keys(data).forEach(name => {
+        const btn = document.createElement("button");
+        btn.className = "category";
+        btn.innerHTML = "<span>" + data[name].icon + "</span>" + name;
+
+        btn.onclick = () => {
+          if(selected.includes(name)){
+            selected = selected.filter(item => item !== name);
+            btn.classList.remove("selected");
+          } else {
+            if(selected.length >= 6){
+              alert("تقدر تختار 6 فئات فقط");
+              return;
+            }
+            selected.push(name);
+            btn.classList.add("selected");
+          }
+
+          document.getElementById("selectedCount").innerText = selected.length;
+        };
+
+        box.appendChild(btn);
+      });
+
+      document.getElementById("selectedCount").innerText = selected.length;
+    }
+
+    function startGame(){
+      if(selected.length !== 6){
+        alert("لازم تختار 6 فئات بالضبط");
+        return;
+      }
+
+      document.getElementById("team1Name").innerText = team1;
+      document.getElementById("team2Name").innerText = team2;
+      document.getElementById("score1").innerText = score1;
+      document.getElementById("score2").innerText = score2;
+
+      buildBoard();
+      showScreen("game");
+    }
+
+    function buildBoard(){
+      const board = document.getElementById("board");
+      board.innerHTML = "";
+      questionsOpened = 0;
+      totalQuestions = 0;
+
+      selected.forEach(category => {
+        const col = document.createElement("div");
+        col.className = "column";
+
+        const head = document.createElement("div");
+        head.className = "category-head";
+        head.innerHTML = data[category].icon + "<br>" + category;
+        col.appendChild(head);
+
+        data[category].questions.forEach((item,index) => {
+          totalQuestions++;
+
+          const btn = document.createElement("button");
+          btn.className = "question-btn";
+          btn.innerText = item.points;
+          btn.onclick = () => openQuestion(category,index,btn);
+          col.appendChild(btn);
+        });
+
+        board.appendChild(col);
+      });
+    }
+
+    function openQuestion(category,index,button){
+      const item = data[category].questions[index];
+
+      currentValue = item.points;
+      currentButton = button;
+
+      document.getElementById("questionCategory").innerText = category;
+      document.getElementById("questionValue").innerText = item.points + " نقطة";
+      document.getElementById("questionText").innerText = item.q;
+      document.getElementById("answer").innerText = item.a;
+      document.getElementById("answer").classList.remove("show");
+      document.getElementById("questionImage").src = item.img;
+
+      document.getElementById("questionModal").classList.add("active");
+
+      startTimer();
+    }
+
+    function startTimer(){
+      clearInterval(timerInterval);
+
+      let time = 35;
+      document.getElementById("timer").innerText = time;
+
+      timerInterval = setInterval(() => {
+        time--;
+        document.getElementById("timer").innerText = time;
+
+        if(time <= 0){
+          clearInterval(timerInterval);
+        }
+      },1000);
+    }
+
+    function showAnswer(){
+      document.getElementById("answer").classList.add("show");
+    }
+
+    function givePoints(team){
+      if(team === 1){
+        score1 += currentValue;
+        document.getElementById("score1").innerText = score1;
+      } else {
+        score2 += currentValue;
+        document.getElementById("score2").innerText = score2;
+      }
+
+      closeQuestion();
+    }
+
+    function closeQuestion(){
+      clearInterval(timerInterval);
+
+      if(currentButton && !currentButton.classList.contains("used")){
+        currentButton.classList.add("used");
+        questionsOpened++;
+      }
+
+      document.getElementById("questionModal").classList.remove("active");
+      checkFinish();
+    }
+
+    function checkFinish(){
+      if(questionsOpened >= totalQuestions){
+        setTimeout(endGame,400);
+      }
+    }
+
+    function endGame(){
+      let text = "";
+
+      if(score1 > score2){
+        text = "🎉 " + team1 + " يفوز بنتيجة " + score1 + " نقطة!";
+      } else if(score2 > score1){
+        text = "🎉 " + team2 + " يفوز بنتيجة " + score2 + " نقطة!";
+      } else {
+        text = "🤝 تعادل! النتيجة " + score1 + " نقطة لكل فريق";
+      }
+
+      document.getElementById("winnerText").innerText = text;
+      showScreen("finish");
+    }
+  </script>
 </body>
 </html>
