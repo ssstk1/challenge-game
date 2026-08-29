@@ -33,8 +33,7 @@ function buildBoard(){
   for(let i=0;i<6;i++){const b=document.createElement("button");b.className="qbtn";b.textContent=pointsFor(i);b.onclick=()=>openQuestion(c,i,b);col.appendChild(b)}board.appendChild(col)
  })
 }
-$("#startGame").onclick=()=>{buildBoard();show("game")};
-
+$("#startGame").onclick=()=>{show("game");buildBoard();}
 function safeKey(s){return "tahaddi_used_"+encodeURIComponent(s)}
 function readUsed(cat){try{return JSON.parse(localStorage.getItem(safeKey(cat))||"[]")}catch{return[]}}
 function saveUsed(cat,arr){try{localStorage.setItem(safeKey(cat),JSON.stringify(arr.slice(-80)))}catch{}}
