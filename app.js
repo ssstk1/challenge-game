@@ -45,15 +45,72 @@ function chooseUnseen(cat,pool){
 
 function hideMedia(){$("#loader").hidden=false;$("#qImage").hidden=true;$("#audioBox").hidden=true;$("#emojiBox").hidden=true;$("#qImage").src=""; if(state.audio){state.audio.pause();state.audio=null}}
 async function commonsImage(query){
- const url=`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url&iiurlwidth=1000&format=json&origin=*`;
- const r=await fetch(url);const j=await r.json();const pages=Object.values(j.query?.pages||{}).filter(p=>p.imageinfo?.[0]?.thumburl||p.imageinfo?.[0]?.url);
- if(!pages.length)throw new Error("no image");return pages[Math.floor(Math.random()*pages.length)].imageinfo[0].thumburl||pages[0].imageinfo[0].url
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+
+  try {
+    const url =
+      "https://commons.wikimedia.org/w/api.php" +
+      "?action=query" +
+      "&generator=search" +
+      "&gsrsearch=" + encodeURIComponent('"' + query + '"') +
+      "&gsrnamespace=6" +
+      "&gsrlimit=10" +
+      "&prop=imageinfo" +
+      "&iiprop=url" +
+      "&iiurlwidth=1200" +
+      "&format=json" +
+      "&origin=*";
+
+    const r = await fetch(url, { signal: controller.signal });
+    const j = await r.json();
+
+    const pages = Object.values(j.query?.pages || {}).filter(p => {
+      const url = p.imageinfo?.[0]?.thumburl || p.imageinfo?.[0]?.url || "";
+      return url && !url.toLowerCase().endsWith(".svg");
+    });
+
+    if (!pages.length) throw new Error("no image");
+
+    return pages[0].imageinfo[0].thumburl ||
+           pages[0].imageinfo[0].url;
+
+  } finally {
+    clearTimeout(timeout);
+  }
 }
+
 async function setImage(query){
- try{const url=await commonsImage(query);$("#qImage").src=url;$("#qImage").onload=()=>{$("#loader").hidden=true;$("#qImage").hidden=false};$("#qImage").onerror=()=>{$("#loader").innerHTML="<span>تعذر تحميل الصورة، السؤال ما زال شغال.</span>"}}
- catch{$("#loader").innerHTML="<span>تعذر تحميل الصورة، السؤال ما زال شغال.</span>"}
-}
-async function itunesTracks(query){
+  const loader = $("#loader");
+  const img = $("#qImage");
+
+  loader.hidden = false;
+  img.hidden = true;
+
+  try {
+    const url = await commonsImage(query);
+
+    img.onload = () => {
+      loader.hidden = true;
+      img.hidden = false;
+    };
+
+    img.onerror = () => {
+      loader.hidden = true;
+      img.hidden = true;
+    };
+
+    img.src = url;
+
+    setTimeout(() => {
+      loader.hidden = true;
+    }, 6000);
+
+  } catch(e) {
+    loader.hidden = true;
+    img.hidden = true;
+  }
+}async function itunesTracks(query){
  const url=`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=40&country=ae`;
  const r=await fetch(url);const j=await r.json();return (j.results||[]).filter(x=>x.previewUrl&&x.trackName)
 }
